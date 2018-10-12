@@ -1,24 +1,48 @@
 # Intro
 
-Your on-camera script bits go here! Leave that "# Intro" exactly as-is; we use it to generate special scripts for the teleprompter 🎥 📜 👩‍💼
+Hey everybody, it's me again, Rony. I want to talk a bit more about what you can do with UIVisualEffectView and in this screencast I will focus on Vibrancy. So, what exactly is vibrancy and how (and why) should you use it? Great questions!
+UIVibrancyEffect is Apple's way of allowing us to adjust the colors of the content to make it feel more vivid when using UIVisualEffectView.
+As you know, an image is worth a 1,000 words, so this **[Slide 01]** is what it looks like. See the difference between the left image and the right one? In real life situations this may be pretty subtle, but it does create a much smoother and slicker user experience.
 
-Denote when a slide should come in like this:
+> Editor: Same as in the previous part,it'd be great if the slide can appear on the top left part of the screen, next to my talking head... :] Instead of full screen. Is that an option?
 
-**[Slide 01]** Lorem ipsum et cetera. 
+Note that a UIVibrancyEffect MUST be added to the contentView of a UIVisualEffectView that has already been configured with a UIBlurEffect. Otherwise, there won't be any blurs to apply the vibrancy effect to.
 
-## Subtopic Heading
-
-**[Slide 02]** If you want to break your script up with subheadings, for your own reference, that's fine! Do it like that ☝️ with non-H1 headings. (As long as it's more than one, use as many #s as you want.)
-
+Ok, now that we've covered all of the background info, let's dive right in to the code...
 
 # Demo
 
+So, I have this cool Brothers Grimm fairytales app, and it has an options view that already includes a blur effect. Let's add vibrancy to it
+
+First, we'll create a vibrancy effect (which is another subclass of UIVisualEffect) based on the blur effect that we already have implemented in code:
+
+```swift
 let vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect)
+```
+
+Then, we create a UIVisualEffectView based on the vibrancy effect:
+
+```swift
 let vibrancyView = UIVisualEffectView(effect: vibrancyEffect)
 vibrancyView.translatesAutoresizingMaskIntoConstraints = false
-vibrancyView.contentView.addSubview(optionsView)
-blurView.contentView.addSubview(vibrancyView)
+```
 
+Next, we add the view, which contains all of the controls we want the vibrancy to be applied to, as a subview of the content view of the new vibrancy view we've just created (wow, that was a complicated sentence; I hope I didn't lose you yet). This is how it looks in code:
+
+```swift
+vibrancyView.contentView.addSubview(optionsView)
+```
+
+Much easier to understand now, right?
+Finally, we add the new vibrancy view to the blur view's content view to complete the effect:
+
+```swift
+blurView.contentView.addSubview(vibrancyView)
+```
+
+Now we just need to take care of all of the relevant constraints. We want the blur view, the vibrancy view and the view that actually contains the controls that need to be affected to all have the same frame. In this specific case, it'll look like this:
+
+```swift
 NSLayoutConstraint.activate([
 vibrancyView.heightAnchor.constraint(equalTo: blurView.contentView.heightAnchor),
 vibrancyView.widthAnchor.constraint(equalTo: blurView.contentView.widthAnchor),
@@ -30,69 +54,31 @@ NSLayoutConstraint.activate([
 optionsView.centerXAnchor.constraint(equalTo: vibrancyView.contentView.centerXAnchor),
 optionsView.centerYAnchor.constraint(equalTo: vibrancyView.contentView.centerYAnchor),
 ])
+```
 
+Finally, since we've added the view containing all of the controls that need to be affected by the vibrancy effect as a subview of the new vibrancy effect view, we need to comment out the way it was previously added to the view hirarchy (because every view should only have one superview - that's just the way it is). So, let's comment out the relevant code block: 
+
+```swift
 //    view.addSubview(optionsView)
 //    NSLayoutConstraint.activate([
 //      view.centerXAnchor.constraint(equalTo: optionsView.centerXAnchor),
 //      view.centerYAnchor.constraint(equalTo: optionsView.centerYAnchor)
 //      ])
+```
 
+And run...
+
+If we now go to the options view, we'll see that everything is looking... Oh... Wait... That's not exactly what we were going for.
+So, what went wrong? The blur effect that we've used uses the light style. The content behind the blur view is also pretty light - resulting in this not so user-friendly display.
+So, if we just go back to the code and change the light UIBlurEffectStyle to the dark one instead:
+
+```swift
 let blurEffect = UIBlurEffect(style: .dark)
-
-## Subtopic Heading
-
-You can also break up your demos into subtopics, like this!
-
-* Let's declare a constant. Bulleted text like this is designed to go along with something that will happen on-screen:
-
-```swift
-let cat = "🐱"
 ```
 
-Oh look! We made a cat constant. That's how you declare constants in Swift. (Don't use bullets for short descriptions of something you already did!)
-
-Plain text, like this, should be infrequent. If you find yourself with about ten seconds worth of text, or more, without something to show on-screen, then consider using an on-camera interlude instead. Would this part be better explained with a diagram, illustration, or live-action prop? If so, use an interlude:
-
-# Interlude
-
-Add on-camera interludes like this!
-
-**[Slide 03]** This is your chance to add just-in-time theory or interesting side notes. Then you can jump back into a demo...
-
-
-# Demo
-
-Get back to a demo like this!
-
-* Next, you would do more demo things, like make a code comment.
-
-```swift
-//more code would go here...
-```
-
-<!--Use comments to put something into the script that shouldn't be read aloud, and the editor won't need. This is good for preparation instructions to yourself such as:
-
-Open somewebsite.com in a full-screen browser before recording!
--->
-
-> Use blockquotes to leave notes for yourself that your video editor will also want to be aware of, like: 
-
-> Highlight `somelineofcode`
-
-> Option-click on `MyClass` to show the documentation
-
---
-
-> Blockquotes are also the place to leave notes that will only be useful to the video editor. These can be useful when you're writing, like this:
-
-> Hey Editor! The next part, where I create a bunch of views, is repetitive. Leave the first one at normal speed, then go through the rest really fast, please!
-
-> But they are also used *during* recording during recording. For example:
- 
-> Editor: I typed this next block of code wrong 5 times! You can skip ahead to the 6th attempt. 
+And build... and run... and go back to the options view... Vuala! We now get to experience some true vibrancy.
 
 # Conclusion
 
-If you want an on-camera part at the very end of the video to wrap things up, add it like so.
-
-You have made it to the end of the video! Good work. :]
+So, in conclusion - UIVisualEffectView offers us great tools, which we have to use wisely, otherwise we may end up hurting our users' eyes instead of improving thier experience using our app. And we don't really want that to happen, right? 
+Have fun playing around with visual effects, and don't worry, you don't have blurry vision, that's what it's supposed to look like... :]
