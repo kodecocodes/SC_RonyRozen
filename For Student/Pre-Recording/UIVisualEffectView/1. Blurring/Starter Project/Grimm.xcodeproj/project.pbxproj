@@ -282,7 +282,7 @@
 				FA4FD39D1FC2905F00CF6B5C /* StoryCell.swift */,
 				FA4FD39B1FC2905B00CF6B5C /* StoryView.swift */,
 				FA4FD39F1FC2906300CF6B5C /* OptionsView.xib */,
-				FA7B5EA51FC23BDA00EC0FF4 /* Categories */,
+				FA7B5EA51FC23BDA00EC0FF4 /* Extensions */,
 				FA7B5EA81FC23BF200EC0FF4 /* Resources */,
 				FA7B5EA71FC23BEB00EC0FF4 /* Models */,
 				FA7B5EA91FC23BF700EC0FF4 /* Interface Builder */,
@@ -291,12 +291,12 @@
 			path = Grimm;
 			sourceTree = "<group>";
 		};
-		FA7B5EA51FC23BDA00EC0FF4 /* Categories */ = {
+		FA7B5EA51FC23BDA00EC0FF4 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
 				FA4FD3951FC28F9700CF6B5C /* Colors.swift */,
 			);
-			path = Categories;
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		FA7B5EA71FC23BEB00EC0FF4 /* Models */ = {
